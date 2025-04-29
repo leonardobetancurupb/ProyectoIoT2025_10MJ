@@ -1,0 +1,10 @@
+FROM python:3.9-slim
+
+RUN mkdir data
+RUN touch ./data/agente_w_rs.json
+RUN apt update
+RUN pip install flask
+
+COPY ./src/app.py .
+
+CMD ["python", "app.py"]
