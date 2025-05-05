@@ -10,7 +10,9 @@
 // Estados de la máquina de estados
 enum State {
   IDLE,
-  SAMPLING
+  CHIRP,
+  PRUNNING,
+  BUNDLING
 };
 
 // Variables globales
@@ -19,6 +21,16 @@ float measurements[CHIRP_SIZE];  // Almacenar las medidas del chirp
 int measurementIndex = 0;        // Índice para el chirp
 State currentState = IDLE;       // Estado inicial
 unsigned long lastStateChange = 0;
+float averageLight = 0.0;        // Promedio de las medidas
+
+// Función para calcular el promedio
+float calculateAverage(float arr[], int size) {
+  float sum = 0;
+  for (int i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+  return sum / size;
+}
 
 void createJsonPacket(); // Declaración de la función para crear el paquete JSON
 
@@ -35,14 +47,14 @@ void loop() {
     case IDLE:
       // Esperar hasta que pase el intervalo de 10 segundos
       if (millis() - lastStateChange >= SEND_INTERVAL) {
-        currentState = SAMPLING;
+        currentState = CHIRP;
         measurementIndex = 0;
         lastStateChange = millis();
-        Serial.println("Estado: SAMPLING - Iniciando toma de muestras");
+        Serial.println("Estado: CHIRP - Iniciando toma de muestras");
       }
       break;
 
-    case SAMPLING:
+    case CHIRP:
       // Tomar una medida cada segundo
       if (millis() - lastStateChange >= 1000) {
         long alsValue = aps.getAmbientLight();
@@ -59,13 +71,30 @@ void loop() {
         }
         lastStateChange = millis();
 
-        // Si se completó el chirp, generar JSON y volver a IDLE
+        // Si se completó el chirp, pasar a PRUNNING
         if (measurementIndex >= CHIRP_SIZE) {
-          createJsonPacket();
-          currentState = IDLE;
-          Serial.println("Estado: IDLE - Muestreo completado");
+          currentState = PRUNNING;
+          Serial.println("Estado: PRUNNING - Calculando promedio");
         }
       }
+      break;
+
+    case PRUNNING:
+      // Calcular el promedio de las medidas
+      averageLight = calculateAverage(measurements, CHIRP_SIZE);
+      Serial.print("Promedio de luz ambiental: ");
+      Serial.print(averageLight);
+      Serial.println(" lx");
+      currentState = BUNDLING;
+      Serial.println("Estado: BUNDLING - Generando paquete JSON");
+      break;
+
+    case BUNDLING:
+      // Generar y mostrar el paquete JSON
+      createJsonPacket();
+      currentState = IDLE;
+      Serial.println("Estado: IDLE - Proceso completado");
+      lastStateChange = millis(); // Reiniciar el temporizador
       break;
   }
 }
@@ -76,11 +105,9 @@ void createJsonPacket() {
   StaticJsonDocument<512> doc;
   doc["id"] = DEVICE_ID;
   doc["timestamp"] = timestamp;
-  JsonArray measurementsArray = doc.createNestedArray("measurements");
-  for (int i = 0; i < CHIRP_SIZE; i++) {
-    measurementsArray.add(measurements[i]);
-  }
+  doc["averageLight"] = averageLight; // Incluir el promedio
   String packet;
   serializeJson(doc, packet);
   Serial.println("Paquete JSON creado: " + packet);
+ 
 }
