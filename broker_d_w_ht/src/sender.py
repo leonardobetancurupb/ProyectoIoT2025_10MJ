@@ -1,14 +1,17 @@
 #Samuel Arroyave 000199426
 #Pablo Peralta  000484263
 
-
 import json
 import time
 import os
+import glob
 from flask import Flask, jsonify, request, render_template_string
 
-# Update the data file path to point to the new location
-DATA_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'agente_w_ht', 'data', 'sensor_w_ht', 'lectura.json')
+# Base directory for sensor data
+BASE_DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'agente_w_ht', 'data')
+
+# Default data file path for backward compatibility
+DEFAULT_DATA_FILE = os.path.join(BASE_DATA_DIR, 'sensor_w_ht', 'lectura.json')
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -16,13 +19,25 @@ app = Flask(__name__)
 # Create a variable to store the latest data
 latest_data = {}
 
-def leer_datos():
+def leer_datos(sensor_id='001'):
+    """
+    Read data from a sensor's data file based on the sensor ID.
+    If the specific sensor file doesn't exist, falls back to the default file.
+    """
     try:
-        with open(DATA_FILE, 'r') as f:
+        # Try to read from the specific sensor directory first
+        sensor_file = os.path.join(BASE_DATA_DIR, f'sensor_w_ht_{sensor_id}', 'lectura.json')
+        
+        # If sensor-specific file doesn't exist, use the default file
+        if not os.path.exists(sensor_file):
+            sensor_file = DEFAULT_DATA_FILE
+            print(f"Sensor file for {sensor_id} not found, using default: {DEFAULT_DATA_FILE}")
+        
+        with open(sensor_file, 'r') as f:
             raw_data = json.load(f)
             # Transform the data to match the required format
             formatted_data = {
-                'id': 'sensor_w_ht_001',
+                'id': f'sensor_w_ht_{sensor_id}',
                 'type': 'sensor_w_ht',
                 'humedad': {
                     'type': 'float',
@@ -35,17 +50,17 @@ def leer_datos():
             }
             return formatted_data
     except FileNotFoundError:
-        print(f"Archivo no encontrado: {DATA_FILE}")
+        print(f"Archivo no encontrado: {sensor_file}")
         return {
-            'id': 'sensor_w_ht_001',
+            'id': f'sensor_w_ht_{sensor_id}',
             'type': 'sensor_w_ht',
             'humedad': {'type': 'float', 'value': 0.0},
             'temperatura': {'type': 'float', 'value': 0.0}
         }
     except json.JSONDecodeError:
-        print(f"Error al decodificar JSON desde: {DATA_FILE}")
+        print(f"Error al decodificar JSON desde: {sensor_file}")
         return {
-            'id': 'sensor_w_ht_001',
+            'id': f'sensor_w_ht_{sensor_id}',
             'type': 'sensor_w_ht',
             'humedad': {'type': 'float', 'value': 0.0},
             'temperatura': {'type': 'float', 'value': 0.0}
@@ -81,11 +96,17 @@ def index():
     formatted_json = json.dumps(data, indent=4, ensure_ascii=False).replace('"', "'")
     return render_template_string(html_template, data_json=formatted_json)
 
-# Route to get the current data - renamed from get_data to sensor_w_ht_00x
-@app.route('/sensor_w_ht_001', methods=['GET'])
-def sensor_w_ht_00x():
+# Dynamic route to handle any sensor with the pattern sensor_w_ht_00X
+@app.route('/sensor_w_ht_<sensor_id>', methods=['GET'])
+def sensor_w_ht_dynamic(sensor_id):
     try:
-        data = leer_datos()
+        # For now, we're reading from a single data file
+        # In a real scenario with multiple sensors, you'd have different data sources
+        data = leer_datos(sensor_id)
+        
+        # Update the ID to match the requested sensor
+        data['id'] = f'sensor_w_ht_{sensor_id}'
+        
         response = jsonify(data)
         # Customize the JSON response to use single quotes
         response.data = response.data.decode('utf-8').replace('"', "'").encode('utf-8')
@@ -95,10 +116,15 @@ def sensor_w_ht_00x():
         error_response.data = error_response.data.decode('utf-8').replace('"', "'").encode('utf-8')
         return error_response, 500
 
+# Keeping the original specific route for backward compatibility
+@app.route('/sensor_w_ht_001', methods=['GET'])
+def sensor_w_ht_001():
+    return sensor_w_ht_dynamic('001')
+
 # Create a data monitoring thread
 def monitor_data():
     global latest_data
-    print(f"Vigilando datos en: {DATA_FILE}")
+    print(f"Vigilando datos en: {DEFAULT_DATA_FILE}")
     last_data = {}
     while True:
         try:

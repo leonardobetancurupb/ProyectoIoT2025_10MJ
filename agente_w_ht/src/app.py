@@ -57,16 +57,26 @@ def recibir_datos():
             global ultimo_dato
             ultimo_dato = datos
             
-            # Crear directorio data/sensor_w_ht si no existe
-            sensor_data_dir = os.path.join(os.path.dirname(__file__), '..', 'data', 'sensor_w_ht')
+            # Extraer el ID del sensor si existe, o usar un valor predeterminado
+            sensor_id = datos.get('sensor_id', '001')
+            
+            # Crear directorio data/sensor_w_ht_XXX si no existe
+            sensor_data_dir = os.path.join(os.path.dirname(__file__), '..', 'data', f'sensor_w_ht_{sensor_id}')
             os.makedirs(sensor_data_dir, exist_ok=True)
             
-            # Guardar datos en el nuevo directorio
+            # Guardar datos en el directorio específico para este sensor
             sensor_data_file = os.path.join(sensor_data_dir, 'lectura.json')
             with open(sensor_data_file, "w") as f:
                 json.dump(datos, f, indent=2)
+            
+            # También guardar en el directorio legacy para mantener compatibilidad
+            legacy_dir = os.path.join(os.path.dirname(__file__), '..', 'data', 'sensor_w_ht')
+            os.makedirs(legacy_dir, exist_ok=True)
+            legacy_file = os.path.join(legacy_dir, 'lectura.json')
+            with open(legacy_file, "w") as f:
+                json.dump(datos, f, indent=2)
                 
-            return jsonify({"status": "success", "message": "Datos recibidos correctamente"}), 200
+            return jsonify({"status": "success", "message": f"Datos de sensor {sensor_id} recibidos correctamente"}), 200
         else:
             return jsonify({"status": "error", "message": "No se recibieron datos válidos"}), 400
     
