@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import serial
 import json
 import os
@@ -43,10 +43,36 @@ def guardar_en_archivo(datos):
     with open(DATA_FILE, "w") as f:
         json.dump(datos, f, indent=2)
 
-# Ruta de la API para consultar el último dato recibido
-@app.route("/lectura", methods=["GET"])
-def obtener_lectura():
-    return jsonify(ultimo_dato)
+
+
+# Nueva ruta para recibir datos del sensor ESP32 vía HTTP POST
+@app.route("/recibirdatos", methods=["POST"])
+def recibir_datos():
+    try:
+        # Recibir datos JSON del sensor
+        datos = request.json
+        
+        if datos:
+            print(f"Datos recibidos vía HTTP: {datos}")
+            global ultimo_dato
+            ultimo_dato = datos
+            
+            # Crear directorio data/sensor_w_ht si no existe
+            sensor_data_dir = os.path.join(os.path.dirname(__file__), '..', 'data', 'sensor_w_ht')
+            os.makedirs(sensor_data_dir, exist_ok=True)
+            
+            # Guardar datos en el nuevo directorio
+            sensor_data_file = os.path.join(sensor_data_dir, 'lectura.json')
+            with open(sensor_data_file, "w") as f:
+                json.dump(datos, f, indent=2)
+                
+            return jsonify({"status": "success", "message": "Datos recibidos correctamente"}), 200
+        else:
+            return jsonify({"status": "error", "message": "No se recibieron datos válidos"}), 400
+    
+    except Exception as e:
+        print(f"Error al recibir datos: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # Iniciar la escucha del Serial en un hilo separado
 if __name__ == "__main__":
