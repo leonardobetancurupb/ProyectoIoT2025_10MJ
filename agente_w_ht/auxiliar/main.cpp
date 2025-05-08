@@ -124,7 +124,7 @@ void loop() {
     Serial.println("Estado C: Creando Dataframe JSON");
 
     // Crear el JSON dataframe
-    dataframe = "{\"id\":\"Sensor1791\",";
+    dataframe = "{\"id\":\"Sensor001\",";
     dataframe += "\"temperatura\":" + String(tmean, 2) + ",";
     dataframe += "\"humedad\":" + String(hmean, 2) + "}";
 
