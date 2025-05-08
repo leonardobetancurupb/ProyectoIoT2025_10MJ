@@ -35,17 +35,34 @@ def leer_datos(sensor_id='001'):
         
         with open(sensor_file, 'r') as f:
             raw_data = json.load(f)
+            
+            # Extraer valores de temperatura y humedad
+            # Intentar diferentes formatos posibles en el JSON
+            temperatura = 0
+            humedad = 0
+            
+            # Intentar obtener los valores de humedad y temperatura
+            if 'temperatura' in raw_data:
+                temperatura = raw_data['temperatura']
+            elif 'temperature' in raw_data:
+                temperatura = raw_data['temperature']
+                
+            if 'humedad' in raw_data:
+                humedad = raw_data['humedad']
+            elif 'humidity' in raw_data:
+                humedad = raw_data['humidity']
+            
             # Transforma los datos al formato requerido
             formatted_data = {
                 'id': f'sensor_w_ht_{sensor_id}',
                 'type': 'sensor_w_ht',
                 'humedad': {
                     'type': 'float',
-                    'value': float(raw_data.get('humedad', 0))
+                    'value': float(humedad)
                 },
                 'temperatura': {
                     'type': 'float',
-                    'value': float(raw_data.get('temperatura', 0))
+                    'value': float(temperatura)
                 }
             }
             return formatted_data
@@ -65,6 +82,14 @@ def leer_datos(sensor_id='001'):
             'humedad': {'type': 'float', 'value': 0.0},
             'temperatura': {'type': 'float', 'value': 0.0}
         }
+    except Exception as e:
+        print(f"Error inesperado al leer datos: {e}")
+        return {
+            'id': f'sensor_w_ht_{sensor_id}',
+            'type': 'sensor_w_ht',
+            'humedad': {'type': 'float', 'value': 0.0},
+            'temperatura': {'type': 'float', 'value': 0.0}
+        }
 
 # Ruta raíz que muestra los datos del sensor en una página HTML
 @app.route('/', methods=['GET'])
@@ -78,25 +103,23 @@ def index():
         <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             h1 { color: #333; }
+            .sensor-id { font-size: 24px; font-weight: bold; color: #0066cc; }
             .data-container { background-color: #f5f5f5; border-radius: 5px; padding: 15px; margin-top: 20px; }
-            pre { background-color: #e0e0e0; padding: 10px; border-radius: 3px; overflow-x: auto; }
         </style>
     </head>
     <body>
         <h1>Datos del Sensor W_HT</h1>
         <div class="data-container">
-            <h2>Lecturas actuales del sensor:</h2>
-            <pre>{{ data_json }}</pre>
+            <h2>Sensor ID:</h2>
+            <div class="sensor-id">{{ sensor_id }}</div>
         </div>
     </body>
     </html>
     """
-    # ensure_ascii=False permite mostrar caracteres UTF-8 correctamente
-    # Se reemplazan las comillas dobles por simples para el formato JSON
-    formatted_json = json.dumps(data, indent=4, ensure_ascii=False).replace('"', "'")
-    return render_template_string(html_template, data_json=formatted_json)
+    # Only pass the sensor ID to the template
+    return render_template_string(html_template, sensor_id=data['id'])
 
-# Ruta dinámica que atiende cualquier sensor con el patrón sensor_w_ht_00X
+# Ruta dinámica que atiende cualquier sensor with el patrón sensor_w_ht_00X
 @app.route('/sensor_w_ht_<sensor_id>', methods=['GET'])
 def sensor_w_ht_dynamic(sensor_id):
     try:
@@ -138,6 +161,31 @@ def monitor_data():
         except Exception as e:
             print(f"Error al procesar datos: {e}")
         time.sleep(10)
+
+# Add a new route to list available sensors
+@app.route('/sensores', methods=['GET'])
+def listar_sensores():
+    """Lista todos los sensores disponibles en el sistema"""
+    try:
+        # Buscar todos los directorios de sensores
+        sensor_dirs = glob.glob(os.path.join(BASE_DATA_DIR, 'sensor_w_ht_*'))
+        
+        # Extraer los IDs de los sensores de los nombres de directorios
+        sensor_ids = [os.path.basename(d).replace('sensor_w_ht_', '') for d in sensor_dirs]
+        
+        # Crear una lista de sensores con sus datos básicos
+        sensors_list = []
+        for sensor_id in sensor_ids:
+            data = leer_datos(sensor_id)
+            sensors_list.append({
+                'id': data['id'],
+                'temperatura': data['temperatura']['value'],
+                'humedad': data['humedad']['value']
+            })
+            
+        return jsonify(sensors_list)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     # Inicia la vigilancia de datos en un hilo separado

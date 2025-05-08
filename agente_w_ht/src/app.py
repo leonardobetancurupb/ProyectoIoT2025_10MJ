@@ -54,8 +54,25 @@ def recibir_datos():
             global ultimo_dato
             ultimo_dato = datos  # Actualizar el último dato recibido
             
-            # Obtener el ID del sensor, o usar '001' como valor por defecto
-            sensor_id = datos.get('sensor_id', '001')
+            # Obtener el ID del sensor desde los datos
+            # Puede venir como 'sensor_id', 'id' o generarse basado en los datos
+            sensor_id = None
+            
+            # Intentar diferentes claves para obtener el ID
+            if 'sensor_id' in datos:
+                sensor_id = datos['sensor_id']
+            elif 'id' in datos:
+                sensor_id = datos['id']
+                # Si el ID ya tiene el prefijo, extraerlo
+                if sensor_id.startswith('sensor_w_ht_'):
+                    sensor_id = sensor_id[12:]
+            
+            # Si no se encuentra un ID, generar uno basado en timestamp
+            if not sensor_id:
+                import time
+                sensor_id = f"{int(time.time())}"
+                
+            print(f"Usando sensor_id: {sensor_id}")
             
             # Crear directorio específico para el sensor
             sensor_data_dir = os.path.join(os.path.dirname(__file__), '..', 'data', f'sensor_w_ht_{sensor_id}')
@@ -71,7 +88,11 @@ def recibir_datos():
             os.makedirs(legacy_dir, exist_ok=True)
             legacy_file = os.path.join(legacy_dir, 'lectura.json')
             with open(legacy_file, "w") as f:
-                json.dump(datos, f, indent=2)
+                # Asegurarse de que el JSON guardado tenga el ID correcto
+                datos_with_id = datos.copy()
+                if 'sensor_id' not in datos_with_id:
+                    datos_with_id['sensor_id'] = sensor_id
+                json.dump(datos_with_id, f, indent=2)
                 
             return jsonify({"status": "success", "message": f"Datos de sensor {sensor_id} recibidos correctamente"}), 200
         else:
