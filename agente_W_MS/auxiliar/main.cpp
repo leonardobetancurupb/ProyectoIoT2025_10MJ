@@ -11,12 +11,12 @@ const int analogPin = A0;        //Entrada Analogica
 //Información de red
 const char* ssid = "UPBWiFi";
 const char* psw = "";
-const char* serverIP = "54.227.175.241";
+const char* serverIP = "10.38.32.137";
 const int serverPort = 4461;
 
 //Información del sensor
-const char* id = "data_sensor_w_m_001";
-const char* typeSensor = "sensor_w_m";
+const char* id = "sensor_W_MS_001";
+const char* typeSensor = "sensor_W_MS";
 
 WiFiClient client;
 

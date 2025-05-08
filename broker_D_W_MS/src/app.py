@@ -6,9 +6,9 @@ import os
 from flask import Flask, render_template_string
  
 # Inicializamos Flask con la carpeta "data" expuesta como estática
-app = Flask(__name__, static_folder='data', static_url_path='/data')
+app = Flask(__name__, static_folder='/data', static_url_path='/data')
  
-DATA_FOLDER = 'data'
+DATA_FOLDER = '/data'
 os.makedirs(DATA_FOLDER, exist_ok=True)
  
 # Uso de html para listar los datos en la dirección
@@ -25,7 +25,7 @@ HTML_TEMPLATE = '''
         {% for archivo in archivos %}
             <li>
                 {{ archivo }}
-                - <a href="/ver/{{ archivo }}" target="_blank">Ver</a>
+                - <a href="/{{ archivo }}" target="_blank">Ver</a>
                 - <a href="/data/{{ archivo }}" download>Descargar</a>
             </li>
         {% endfor %}
@@ -38,14 +38,14 @@ HTML_TEMPLATE = '''
 '''
  
 # Ruta GET personalizada
-@app.route('/sensor_w_m', methods=['GET'])
+@app.route('/', methods=['GET'])
 def listar_archivos_sensor():
     archivos = [f for f in os.listdir(DATA_FOLDER)
-                if f.startswith('sensor_w_m_') and f.endswith('.json')]
+                if f.startswith('sensor_W_MS_') and f.endswith('.json')]
     return render_template_string(HTML_TEMPLATE, archivos=archivos)
  
 # Ruta para ver el contenido de un archivo
-@app.route('/ver/<nombre_archivo>', methods=['GET'])
+@app.route('/<nombre_archivo>', methods=['GET'])
 def ver_archivo(nombre_archivo):
     try:
         with open(os.path.join(DATA_FOLDER, nombre_archivo), 'r', encoding='utf-8') as f:

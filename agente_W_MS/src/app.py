@@ -7,7 +7,7 @@ import json
 from flask import Flask, request, jsonify
  
 app = Flask(__name__)
-DATA_FOLDER = 'data'
+DATA_FOLDER = '/data'
 os.makedirs(DATA_FOLDER, exist_ok=True)
  
 @app.route('/recibir', methods=['POST'])
@@ -24,10 +24,10 @@ def recibir():
  
         # Extraer y limpiar el ID
         raw_id = str(data['id'])
-        clean_id = raw_id.replace('sensor_w_m_', '')
+        clean_id = raw_id.replace('sensor_W_MS_', '')
  
         # Crear el nombre de archivo correcto
-        filename = f'sensor_w_m_{clean_id}.json'
+        filename = f'sensor_W_MS_{clean_id}.json'
         filepath = os.path.join(DATA_FOLDER, filename)
  
         # Guardar o sobrescribir el archivo
