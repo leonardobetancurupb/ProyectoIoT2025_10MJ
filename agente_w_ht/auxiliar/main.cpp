@@ -5,13 +5,12 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
-// WiFi settings
-const char* ssid = "UPBWiFi";     // Replace with your WiFi SSID
-const char* password = "";  // Replace with your WiFi password
+// WiFi 
+const char* ssid = "UPBWiFi";
+const char* password = ""; 
 
 // Server settings
-const char* serverAddress = "http://10.8.158.153:4441//recibirdatos";  // Replace with your PC's IP address
-
+const char* serverAddress = "http://10.8.158.153:4441//recibirdatos";
 // Variables globales
 String dataframe = "";
 ClosedCube_HDC1080 sensor;
@@ -22,7 +21,7 @@ float tmean = 0;
 float hmean = 0;
 char estado;
 
-// --- Funciones auxiliares ---
+// --- Funciones auxiliares
 float mean(float arr[], int size) {
   float sum = 0;
   for (int i = 0; i < size; i++) {
@@ -87,7 +86,7 @@ void loop() {
       float temp = sensor.readTemperature();
       float hum = sensor.readHumidity();
 
-      // --- Prunning básico ---
+      // Prunning básico
       if ((temp >= -10 && temp <= 85) && (hum >= 0 && hum <= 100)) {
         tempArray[n] = temp;
         humArray[n] = hum;
@@ -124,7 +123,7 @@ void loop() {
   else if (estado == 'C') {
     Serial.println("Estado C: Creando Dataframe JSON");
 
-    // Fix: Create proper JSON with numeric values (not string values)
+    // Crear el JSON dataframe
     dataframe = "{\"id\":\"Sensor1791\",";
     dataframe += "\"temperatura\":" + String(tmean, 2) + ",";
     dataframe += "\"humedad\":" + String(hmean, 2) + "}";
