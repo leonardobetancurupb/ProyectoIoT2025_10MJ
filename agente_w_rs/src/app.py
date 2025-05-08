@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 @app.route("/recibir", methods=["POST"])
 def getData():
-    ruta_directorio = "data"
-    ruta_archivo = os.path.join(ruta_directorio, "agente_w_rs.json")
+    ruta_directorio = "/data"
+    ruta_archivo = os.path.join(ruta_directorio, "agente_W_RS_001.json")
 
     try:
         # Asegurar que el directorio exista
@@ -33,4 +33,3 @@ def getData():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=4451)
-
