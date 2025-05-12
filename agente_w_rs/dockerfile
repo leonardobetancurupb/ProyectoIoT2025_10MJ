@@ -1,9 +1,0 @@
-FROM python:3.9-slim
- 
-RUN apt update
-RUN pip install flask
-
-COPY ./src/app.py .
-
-EXPOSE 4451
-CMD ["python", "app.py"]
