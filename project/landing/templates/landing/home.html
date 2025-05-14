@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - IoT Sensor Dashboard{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white rounded p-5 mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-7">
+            <h1 class="display-4 fw-bold mb-3">Smart Sensor Dashboard</h1>
+            <p class="lead mb-4">Monitor and manage your IoT sensors with real-time data visualization, analytics, and management tools.</p>
+            <div class="d-grid gap-2 d-md-flex">
+                <a href="{% url 'sensors:dashboard' %}" class="btn btn-light btn-lg px-4 me-md-2">View Sensors</a>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:register' %}" class="btn btn-outline-light btn-lg px-4">Get Started</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block">
+            <img src="https://via.placeholder.com/600x400?text=IoT+Sensors" class="img-fluid rounded" alt="IoT Sensors">
+        </div>
+    </div>
+</div>
+
+<!-- Latest News Section -->
+<h2 class="mb-4">Latest News</h2>
+
+<div class="row">
+    {% for news in news_list %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if news.image %}
+            <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
+            {% else %}
+            <img src="https://via.placeholder.com/350x200?text=News+Article" class="card-img-top" alt="{{ news.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ news.title }}</h5>
+                <p class="card-text text-muted small">{{ news.created_at|date:"F d, Y" }}</p>
+                <p class="card-text">{{ news.summary }}</p>
+                <a href="{% url 'landing:news_detail' news.id %}" class="btn btn-sm btn-primary stretched-link">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="card p-4 shadow-sm">
+            <h4>Welcome to our IoT Sensor Dashboard!</h4>
+            <p class="mb-0">This platform allows you to monitor and manage your IoT sensors with ease. Stay tuned for updates and news about the latest IoT technologies and our platform improvements.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Features Section -->
+<div class="py-5">
+    <h2 class="mb-4 text-center">Key Features</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-chart-line fa-2x p-3"></i>
+                    </div>
+                    <h5 class="card-title">Real-time Monitoring</h5>
+                    <p class="card-text">Track your sensor data in real-time with dynamic dashboards and visualizations.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-bell fa-2x p-3"></i>
+                    </div>
+                    <h5 class="card-title">Alerts & Notifications</h5>
+                    <p class="card-text">Receive immediate alerts when sensors detect anomalies or cross defined thresholds.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-cogs fa-2x p-3"></i>
+                    </div>
+                    <h5 class="card-title">Easy Management</h5>
+                    <p class="card-text">Add, configure, and manage your sensors through a simple and intuitive interface.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

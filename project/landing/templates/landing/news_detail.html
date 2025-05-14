@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ news.title }} - IoT Sensor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'landing:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'landing:news_list' %}">News</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ news.title }}</li>
+        </ol>
+    </nav>
+
+    <article class="mb-5">
+        <header class="mb-4">
+            <h1 class="fw-bold">{{ news.title }}</h1>
+            <div class="text-muted mb-3">
+                <i class="far fa-calendar-alt me-1"></i> {{ news.created_at|date:"F d, Y" }}
+                {% if news.updated_at != news.created_at %}
+                    <span class="mx-2">•</span>
+                    <i class="fas fa-edit me-1"></i> Updated: {{ news.updated_at|date:"F d, Y" }}
+                {% endif %}
+            </div>
+        </header>
+
+        {% if news.image %}
+        <figure class="figure mb-4">
+            <img src="{{ news.image.url }}" class="figure-img img-fluid rounded shadow" alt="{{ news.title }}">
+        </figure>
+        {% endif %}
+
+        <div class="lead mb-4">{{ news.summary }}</div>
+
+        <div class="news-content">
+            {{ news.content|safe|linebreaks }}
+        </div>
+    </article>
+
+    <div class="card bg-light mb-4">
+        <div class="card-body">
+            <h5>Stay Updated</h5>
+            <p class="mb-0">Subscribe to our newsletter to get the latest updates about our IoT platform and technologies.</p>
+            <form class="row g-3 mt-3">
+                <div class="col-md-8">
+                    <input type="email" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="related-news">
+        <h3 class="mb-4">More News</h3>
+        <div class="row">
+            {% for related_news in news_list|slice:":3" %}
+                {% if related_news != news %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if related_news.image %}
+                        <img src="{{ related_news.image.url }}" class="card-img-top" alt="{{ related_news.title }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/350x200?text=News+Article" class="card-img-top" alt="{{ related_news.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related_news.title }}</h5>
+                            <p class="card-text text-muted small">{{ related_news.created_at|date:"F d, Y" }}</p>
+                            <a href="{% url 'landing:news_detail' related_news.id %}" class="btn btn-sm btn-outline-primary stretched-link">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

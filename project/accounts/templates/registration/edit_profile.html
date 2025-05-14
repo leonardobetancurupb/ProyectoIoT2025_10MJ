@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - IoT Sensor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Your Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>There was an error with your submission</strong>
+                            <ul>
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <h5 class="mb-3">Personal Information</h5>
+                        
+                        <div class="row g-3">
+                            <!-- User Form -->
+                            <div class="col-md-6">
+                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                <input type="text" name="{{ user_form.first_name.name }}" id="{{ user_form.first_name.id_for_label }}" class="form-control {% if user_form.first_name.errors %}is-invalid{% endif %}" value="{{ user_form.first_name.value }}" required>
+                                {% if user_form.first_name.errors %}
+                                <div class="invalid-feedback">{{ user_form.first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                <input type="text" name="{{ user_form.last_name.name }}" id="{{ user_form.last_name.id_for_label }}" class="form-control {% if user_form.last_name.errors %}is-invalid{% endif %}" value="{{ user_form.last_name.value }}" required>
+                                {% if user_form.last_name.errors %}
+                                <div class="invalid-feedback">{{ user_form.last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+                                <input type="email" name="{{ user_form.email.name }}" id="{{ user_form.email.id_for_label }}" class="form-control {% if user_form.email.errors %}is-invalid{% endif %}" value="{{ user_form.email.value }}" required>
+                                {% if user_form.email.errors %}
+                                <div class="invalid-feedback">{{ user_form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Add any additional profile fields here -->
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Change Password Card -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Change Password</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted">Want to update your password? Use the link below to access the password change form.</p>
+                    <a href="{% url 'password_change' %}" class="btn btn-outline-primary">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

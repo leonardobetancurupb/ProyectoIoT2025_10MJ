@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - IoT Sensor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4">About IoT Sensor Dashboard</h1>
+            <p class="lead">Our platform provides comprehensive IoT sensor management solutions for businesses and individuals.</p>
+            
+            <div class="mb-5">
+                <h3>Our Mission</h3>
+                <p>To simplify the monitoring and management of IoT devices through an intuitive, powerful dashboard that provides real-time insights and analytics.</p>
+            </div>
+            
+            <div class="mb-5">
+                <h3>What We Offer</h3>
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Real-time sensor data monitoring and visualization
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Historical data analysis and trends
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Alert system for critical threshold breaches
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Comprehensive sensor management interface
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Secure user authentication and authorization
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mb-5">
+                <h3>Our Technology</h3>
+                <p>Built with Django, our platform leverages modern web technologies to provide a responsive, reliable, and secure experience:</p>
+                <div class="row text-center mt-4">
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fab fa-python fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">Python</p>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fab fa-js fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">JavaScript</p>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fas fa-database fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">SQLite</p>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fab fa-bootstrap fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">Bootstrap</p>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fas fa-chart-line fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">Chart.js</p>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2 mb-4">
+                        <div class="p-3 bg-light rounded">
+                            <i class="fas fa-server fa-2x text-primary"></i>
+                            <p class="mt-2 mb-0 small">Django</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Contact Us</h3>
+                    <p>Have questions or need support? Get in touch with us.</p>
+                    
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Your Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="your.email@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Our Location</h3>
+                    <p><i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 Tech Street, Innovation City</p>
+                    <p><i class="fas fa-phone me-2 text-primary"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope me-2 text-primary"></i> info@iotdashboard.com</p>
+                    
+                    <div class="mt-3">
+                        <div class="bg-light p-2 rounded text-center">
+                            <!-- Placeholder for a map -->
+                            <img src="https://via.placeholder.com/300x200?text=Map" class="img-fluid rounded" alt="Office Location">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
