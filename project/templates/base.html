@@ -18,21 +18,21 @@
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            </button>            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'landing:home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if '/sensors/' in request.path %}active{% endif %}" href="{% url 'sensors:dashboard' %}">Sensors</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="{% url 'landing:aboutus' %}">About Us</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
-                    {% if user.is_authenticated %}
+                <ul class="navbar-nav ms-auto">                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/sensors/' in request.path %}active{% endif %}" href="{% url 'sensors:dashboard' %}">
+                                <i class="fas fa-chart-line me-1"></i>Sensors
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user-circle me-1"></i>{{ user.username }}

@@ -5,12 +5,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Orion Context Broker settings
+ORION_URL = os.environ.get('ORION_URL', 'http://localhost:1026')
+CRATE_URL = os.environ.get('CRATE_URL', 'http://localhost:4200')
+QUANTUMLEAP_URL = os.environ.get('QUANTUMLEAP_URL', 'http://localhost:8668')
 
 # Application definition
 INSTALLED_APPS = [
@@ -100,3 +105,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGIN_URL = 'accounts:login'
 LOGOUT_REDIRECT_URL = 'landing:home'
+
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

@@ -14,10 +14,11 @@ from .models import Sensor, SensorData, SensorType
 from .forms import SensorForm, SensorTypeForm, SensorFilterForm, ManualDataEntryForm
 from .utils import prepare_time_series_data, generate_demo_data
 
-class DashboardView(ListView):
+class DashboardView(LoginRequiredMixin, ListView):
     model = Sensor
     template_name = 'sensors/dashboard.html'
     context_object_name = 'sensors'
+    login_url = 'accounts:login'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,17 +36,14 @@ class DashboardView(ListView):
                 queryset = queryset.filter(type_id=type_id)
             except (ValueError, TypeError):
                 pass
-        
-        # Only show active sensors for non-authenticated users
-        if not self.request.user.is_authenticated:
-            queryset = queryset.filter(is_active=True)
             
         return queryset
 
-class SensorDetailView(DetailView):
+class SensorDetailView(LoginRequiredMixin, DetailView):
     model = Sensor
     template_name = 'sensors/detail.html'
     context_object_name = 'sensor'
+    login_url = 'accounts:login'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

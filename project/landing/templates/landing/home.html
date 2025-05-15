@@ -1,91 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - IoT Sensor Dashboard{% endblock %}
+{% block title %}Home - ProyectoIoT2025_10MJ{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Project Description Section -->
 <div class="bg-primary text-white rounded p-5 mb-5">
     <div class="row align-items-center">
-        <div class="col-lg-7">
-            <h1 class="display-4 fw-bold mb-3">Smart Sensor Dashboard</h1>
-            <p class="lead mb-4">Monitor and manage your IoT sensors with real-time data visualization, analytics, and management tools.</p>
-            <div class="d-grid gap-2 d-md-flex">
-                <a href="{% url 'sensors:dashboard' %}" class="btn btn-light btn-lg px-4 me-md-2">View Sensors</a>
-                {% if not user.is_authenticated %}
-                <a href="{% url 'accounts:register' %}" class="btn btn-outline-light btn-lg px-4">Get Started</a>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-lg-5 d-none d-lg-block">
-            <img src="https://via.placeholder.com/600x400?text=IoT+Sensors" class="img-fluid rounded" alt="IoT Sensors">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold mb-4">ProyectoIoT2025_10MJ</h1>
+            <p class="lead mb-4">Sistema de gestión de sensores ambientales con operaciones CRUD integradas</p>
         </div>
     </div>
 </div>
 
-<!-- Latest News Section -->
-<h2 class="mb-4">Latest News</h2>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">Descripción del Proyecto</h2>
 
-<div class="row">
-    {% for news in news_list %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-            {% if news.image %}
-            <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
-            {% else %}
-            <img src="https://via.placeholder.com/350x200?text=News+Article" class="card-img-top" alt="{{ news.title }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ news.title }}</h5>
-                <p class="card-text text-muted small">{{ news.created_at|date:"F d, Y" }}</p>
-                <p class="card-text">{{ news.summary }}</p>
-                <a href="{% url 'landing:news_detail' news.id %}" class="btn btn-sm btn-primary stretched-link">Read More</a>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <div class="col-12 text-center py-5">
-        <div class="card p-4 shadow-sm">
-            <h4>Welcome to our IoT Sensor Dashboard!</h4>
-            <p class="mb-0">This platform allows you to monitor and manage your IoT sensors with ease. Stay tuned for updates and news about the latest IoT technologies and our platform improvements.</p>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+                    <p class="lead">Este sistema permite la gestión de sensores, conectándose a una base de datos externa mediante un broker de seguridad.</p>
+                    
+                    <p>Al iniciar sesión, los usuarios pueden consultar, crear, actualizar o eliminar sensores registrados en la base de datos conectada a través del Orion Context Broker.</p>
 
-<!-- Features Section -->
-<div class="py-5">
-    <h2 class="mb-4 text-center">Key Features</h2>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
-                        <i class="fas fa-chart-line fa-2x p-3"></i>
+                    <p>Características principales del sistema:</p>
+                    <ul>
+                        <li>Conexión segura con la base de datos de sensores a través de un broker de seguridad</li>
+                        <li>Operaciones CRUD sobre sensores disponibles solo para usuarios autenticados</li>
+                        <li>Interfaz web sencilla para visualizar y administrar sensores ambientales</li>
+                        
+                    </ul>                    <div class="text-center mt-5">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'sensors:dashboard' %}" class="btn btn-primary btn-lg px-4">Ver Panel de Sensores</a>
+                        {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-lg px-4">Iniciar Sesión</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary btn-lg px-4 ms-3">Registrarse</a>
+                        {% endif %}
                     </div>
-                    <h5 class="card-title">Real-time Monitoring</h5>
-                    <p class="card-text">Track your sensor data in real-time with dynamic dashboards and visualizations.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
-                        <i class="fas fa-bell fa-2x p-3"></i>
-                    </div>
-                    <h5 class="card-title">Alerts & Notifications</h5>
-                    <p class="card-text">Receive immediate alerts when sensors detect anomalies or cross defined thresholds.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
-                        <i class="fas fa-cogs fa-2x p-3"></i>
-                    </div>
-                    <h5 class="card-title">Easy Management</h5>
-                    <p class="card-text">Add, configure, and manage your sensors through a simple and intuitive interface.</p>
                 </div>
             </div>
         </div>

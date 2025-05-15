@@ -1,12 +1,18 @@
-#Despliegue de agente y broker
+# Despliegue completo del sistema IoT con servicios de Orion, CrateDB, web y gestión de sensores
+version: "3.8"
+
 services:
+  # Agentes y brokers existentes
   agente:
     container_name: agente_W_RS
     build: ./agente_W_RS
     ports:
       - "4451:4451"
     volumes:
-      - /data:/data
+      - ./agente_W_RS/data:/data
+    restart: unless-stopped
+    depends_on:
+      - orion
 
   broker:
     container_name: broker_D_W_RS
@@ -14,4 +20,85 @@ services:
     ports:
       - "4450:4450"
     volumes:
-      - /data:/data
+      - ./broker_D_W_RS/data:/data
+    restart: unless-stopped
+    depends_on:
+      - orion
+
+  # MongoDB - Requisito para Orion Context Broker
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    restart: always
+    command: --nojournal
+
+  # Orion Context Broker
+  orion:
+    image: fiware/orion:3.7.0
+    container_name: orion
+    depends_on:
+      - mongodb
+    ports:
+      - "1026:1026"
+    command: -dbhost mongodb -logLevel INFO -corsOrigin __ALL
+    restart: always
+
+  # QuantumLeap - Para almacenamiento temporal de datos
+  quantumleap:
+    image: smartsdk/quantumleap:0.8.3
+    container_name: quantumleap
+    ports:
+      - "8668:8668"
+    depends_on:
+      - crate
+    environment:
+      - CRATE_HOST=crate
+      - LOGLEVEL=INFO
+    restart: always
+
+  # CrateDB - Base de datos temporal
+  crate:
+    image: crate:4.6.6
+    container_name: crate
+    ports:
+      - "4200:4200"  # Admin UI
+      - "4300:4300"  # Transport protocol
+    command: crate -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
+    volumes:
+      - crate_data:/data
+    environment:
+      - CRATE_HEAP_SIZE=2g
+    restart: always
+
+  # Web app (Django)
+  web:
+    build: 
+      context: ./project
+      dockerfile: Dockerfile
+    container_name: django_web
+    restart: always
+    volumes:
+      - ./project:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8
+      - DATABASE_URL=sqlite:////app/db.sqlite3
+      - ORION_URL=http://orion:1026
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+    depends_on:
+      - orion    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --no-input &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+  crate_data:
