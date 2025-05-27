@@ -1,104 +1,121 @@
-# Despliegue completo del sistema IoT con servicios de Orion, CrateDB, web y gestión de sensores
 version: "3.8"
 
 services:
-  # Agentes y brokers existentes
-  agente:
-    container_name: agente_W_RS
-    build: ./agente_W_RS
-    ports:
-      - "4451:4451"
-    volumes:
-      - ./agente_W_RS/data:/data
-    restart: unless-stopped
-    depends_on:
-      - orion
-
-  broker:
-    container_name: broker_D_W_RS
-    build: ./broker_D_W_RS
-    ports:
-      - "4450:4450"
-    volumes:
-      - ./broker_D_W_RS/data:/data
-    restart: unless-stopped
-    depends_on:
-      - orion
-
-  # MongoDB - Requisito para Orion Context Broker
-  mongodb:
-    image: mongo:4.4
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
-    restart: always
-    command: --nojournal
-
   # Orion Context Broker
   orion:
-    image: fiware/orion:3.7.0
+    image: fiware/orion-ld
     container_name: orion
+    hostname: orion
     depends_on:
-      - mongodb
+      - mongo-db
+    networks:
+      - default
+    expose:
+      - "1026"
     ports:
-      - "1026:1026"
-    command: -dbhost mongodb -logLevel INFO -corsOrigin __ALL
-    restart: always
+      - "5026:1026" # Acceso desde host
+    command: -dbhost mongo-db -logLevel DEBUG
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail -s http://localhost:1026/version || exit 1"]
+      interval: 10m0s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 
-  # QuantumLeap - Para almacenamiento temporal de datos
+  # QuantumLeap (conexión con CrateDB)
   quantumleap:
-    image: smartsdk/quantumleap:0.8.3
-    container_name: quantumleap
-    ports:
-      - "8668:8668"
+    image: orchestracities/quantumleap
+    container_name: fiware-quantumleap
+    hostname: quantumleap
     depends_on:
-      - crate
+      - crate-db
     environment:
-      - CRATE_HOST=crate
-      - LOGLEVEL=INFO
-    restart: always
-
-  # CrateDB - Base de datos temporal
-  crate:
-    image: crate:4.6.6
-    container_name: crate
+      - CRATE_HOST=crate-db
+      - LOGLEVEL=DEBUG
     ports:
-      - "4200:4200"  # Admin UI
-      - "4300:4300"  # Transport protocol
-    command: crate -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
-    volumes:
-      - crate_data:/data
-    environment:
-      - CRATE_HEAP_SIZE=2g
-    restart: always
+      - "5068:8668"
+    networks:
+      - default
 
-  # Web app (Django)
+  # MongoDB para Orion
+  mongo-db:
+    image: mongo:3.6
+    container_name: db-mongo
+    hostname: mongo-db
+    expose:
+      - "27017"
+    ports:
+      - "5017:27017"
+    volumes:
+      - mvmongo-db:/data/db
+    networks:
+      - default
+
+  # CrateDB para QuantumLeap
+  crate-db:
+    image: crate
+    container_name: db-crate
+    hostname: crate-db
+    command: crate -Cauth.host_based.enabled=false -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
+    environment:
+      - CRATE_HEAP_SIZE=4g
+    ports:
+      - "5042:4200" # UI web de CrateDB
+      - "5043:4300"
+      - "5054:5432"
+    volumes:
+      - mvcrate-db:/data
+    networks:
+      - default
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    depends_on:
+      - crate-db
+    ports:
+      - "5030:3000" # Acceso desde host
+    volumes:
+      - mvgrafana:/var/lib/grafana
+    networks:
+      - default
+
+  # Web (Django)
   web:
-    build: 
+    build:
       context: ./project
       dockerfile: Dockerfile
     container_name: django_web
-    restart: always
-    volumes:
-      - ./project:/app
+    hostname: django_web
     ports:
-      - "8000:8000"
+      - "5000:8000" # Acceso Django (puerto local:puerto contenedor)
+    depends_on:
+      - orion
     environment:
       - DEBUG=True
       - SECRET_KEY=django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8
       - DATABASE_URL=sqlite:////app/db.sqlite3
       - ORION_URL=http://orion:1026
-      - ALLOWED_HOSTS=localhost,127.0.0.1
-    depends_on:
-      - orion    command: >
+      - ALLOWED_HOSTS=localhost,127.0.0.1,django_web
+    volumes:
+      - ./project:/app
+    command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --no-input &&
              gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    networks:
+      - default
+    restart: always
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
 
 volumes:
-  mongodb_data:
-  mongodb_config:
-  crate_data:
+  mvmongo-db: {}
+  mvcrate-db: {}
+  mvgrafana: {}
