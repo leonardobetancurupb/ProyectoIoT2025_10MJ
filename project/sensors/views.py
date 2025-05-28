@@ -98,7 +98,7 @@ class SensorCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'sensors/form.html'
     form_class = SensorForm
     success_url = reverse_lazy('sensors:manage')
-    success_message = "Sensor '%(name)s' was created successfully"
+    success_message = "Sensor '%(sensor_id)s' was created successfully"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,7 +115,7 @@ class SensorEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'sensors/form.html'
     form_class = SensorForm
     success_url = reverse_lazy('sensors:manage')
-    success_message = "Sensor '%(name)s' was updated successfully"
+    success_message = "Sensor '%(sensor_id)s' was updated successfully"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

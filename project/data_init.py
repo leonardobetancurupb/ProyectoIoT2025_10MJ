@@ -50,15 +50,13 @@ def create_users():
 
 def create_sensor_types():
     """Create sensor types"""
+    # Clear existing types first
+    SensorType.objects.all().delete()
+    
     types = [
-        ('Temperature', 'Measures ambient temperature in Celsius or Fahrenheit'),
-        ('Humidity', 'Measures relative humidity percentage in the air'),
-        ('Pressure', 'Measures atmospheric pressure'),
-        ('Light', 'Measures ambient light levels'),
-        ('Motion', 'Detects movement in the surrounding area'),
-        ('Gas', 'Detects various gases in the environment'),
-        ('Soil Moisture', 'Measures moisture content in soil'),
-        ('Water Level', 'Detects water levels in tanks or containers'),
+        ('Humedad y Temperatura', 'Sensor que mide la humedad relativa y temperatura ambiente'),
+        ('Radiacion Solar', 'Sensor que mide la intensidad de radiación solar'),
+        ('Humedad de Suelo', 'Sensor que mide el nivel de humedad en el suelo'),
     ]
     
     for name, description in types:
@@ -108,25 +106,16 @@ def create_sensor_data(sensor):
     # Generate 48 hourly readings for the past 48 hours
     end_time = datetime.now()
     start_time = end_time - timedelta(hours=48)
-    
-    # Set base value and unit based on sensor type
-    if sensor.type.name == 'Temperature':
+      # Set base value and unit based on sensor type
+    if sensor.type.name == 'Humedad y Temperatura':
         base_value = 22.0  # room temperature in Celsius
         unit = '°C'
         variance = 3.0
-    elif sensor.type.name == 'Humidity':
-        base_value = 45.0  # percent
-        unit = '%'
-        variance = 10.0
-    elif sensor.type.name == 'Pressure':
-        base_value = 1013.0  # hPa (standard atmosphere)
-        unit = 'hPa'
-        variance = 5.0
-    elif sensor.type.name == 'Light':
-        base_value = 500.0  # lux
-        unit = 'lux'
+    elif sensor.type.name == 'Radiacion Solar':
+        base_value = 500.0  # W/m²
+        unit = 'W/m²'
         variance = 200.0
-    elif sensor.type.name == 'Soil Moisture':
+    elif sensor.type.name == 'Humedad de Suelo':
         base_value = 35.0  # percent
         unit = '%'
         variance = 15.0

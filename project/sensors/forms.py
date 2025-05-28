@@ -3,15 +3,44 @@ from .models import SensorType, Sensor, SensorData
 
 class SensorForm(forms.ModelForm):
     """Form for creating and updating sensors"""
+    sensor_id = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Enter unique sensor ID (e.g., TEMP_001)',
+            'required': True
+        }),
+        help_text="A unique identifier for your sensor"
+    )
+    
+    parameter = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Enter parameter name (e.g., temperature, humidity)',
+            'required': True
+        }),
+        help_text="What does this sensor measure?"
+    )
+    
     class Meta:
         model = Sensor
-        fields = ['name', 'type', 'location', 'is_active']
+        fields = ['sensor_id', 'type', 'parameter']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter sensor name'}),
             'type': forms.Select(attrs={'class': 'form-select'}),
-            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Where is this sensor located?'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].help_text = "Select the type of sensor"
+        
+    def save(self, commit=True):
+        sensor = super().save(commit=False)
+        # Auto-generate name from sensor_id and parameter
+        sensor.name = f"{sensor.sensor_id} ({sensor.parameter})"
+        if commit:
+            sensor.save()
+        return sensor
 
 class SensorTypeForm(forms.ModelForm):
     """Form for creating and updating sensor types"""
