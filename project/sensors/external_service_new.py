@@ -46,6 +46,7 @@ class ExternalSensorService:
     def send_sensor_to_external_server(self, sensor):
         """
         Send sensor data to external server when a sensor is created
+        Uses simplified format as requested by user
         
         Args:
             sensor: Sensor model instance
@@ -101,7 +102,7 @@ class ExternalSensorService:
         except Exception as e:
             logger.error(f"Unexpected error sending sensor {sensor.sensor_id}: {str(e)}")
             return False, {"status": "error", "message": f"Unexpected error: {str(e)}"}
-
+    
     def update_sensor_value(self, sensor, value, unit="units"):
         """
         Update sensor value on external server using simplified format
@@ -116,6 +117,7 @@ class ExternalSensorService:
         """
         try:
             # Prepare value update data in simplified format
+            # Use the value as the attribute name like in the example: "25.9": {...}
             update_data = {
                 str(value): {
                     "type": "Float",
