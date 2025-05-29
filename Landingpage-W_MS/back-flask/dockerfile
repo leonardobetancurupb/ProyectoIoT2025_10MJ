@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copiar el requirements.txt al contenedor
+COPY requirements.txt .
+
+# Instala las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia el código del backend
+COPY back-end/ .
+
+# Expone el puerto
+EXPOSE 5000
+
+# Comando para correr Flask (ajústalo si no usas app.py)
+CMD ["flask", "--app", "app", "run", "--host=0.0.0.0", "--port=5000"]
