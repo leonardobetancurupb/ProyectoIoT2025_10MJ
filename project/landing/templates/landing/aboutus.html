@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<style>
+    .profile-img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #dee2e6;
+    }
+</style>
+{% endblock %}
 
 {% block title %}Sobre Nosotros - ProyectoIoT2025_10MJ{% endblock %}
 
@@ -11,7 +22,7 @@
     <div class="row g-5">
         <!-- Samuel Arroyave -->
         <div class="col-md-4 text-center">
-            <img src="{% static 'images/samuel.png' %}" class="img-fluid rounded-circle mb-3" alt="Samuel Arroyave">
+            <img src="{% static 'images/samuel.png' %}" class="profile-img mb-3" alt="Samuel Arroyave">
             <h5>Samuel Arroyave</h5>
             <p class="text-muted">Ingeniero de Sistemas e informática</p>
             <p>Estudiante de la Universidad Pontificia Bolivariana,experto en desarrollo de software y arquitectura de
@@ -22,7 +33,7 @@
 
         <!-- Vera Zasulich -->
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Vera Zasulich">
+            <img src="{% static 'images/vera.png' %}" class="profile-img mb-3" alt="Vera Zasulich">
             <h5>Vera Zasulich</h5>
             <p class="text-muted">Ingeniera Electrónica</p>
             <p>Especializada en análisis de datos y machine learning.Tiene experiencia en circuitos de potencia,
@@ -31,7 +42,7 @@
 
         <!-- Ada Mattos -->
         <div class="col-md-4 text-center">
-            <img src="{% static 'images/ada.png' %}" class="img-fluid rounded-circle mb-3" alt="Ada Mattos">
+            <img src="{% static 'images/ada.png' %}" class="profile-img mb-3" alt="Ada Mattos">
             <h5>Ada Mattos</h5>
             <p class="text-muted">Ingeniera en Ciencia de Datos</p>
             <p>Estudiante de la Universidad Pontificia Bolivariana,experta en visualización de datos y estadística
@@ -40,7 +51,7 @@
 
         <!-- Pablo Peralta -->
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Pablo Peralta">
+            <img src="{% static 'images/pablo.png' %}" class="profile-img mb-3" alt="Pablo Peralta">
             <h5>Pablo Peralta</h5>
             <p class="text-muted">Ingeniero en Ciencia de Datos</p>
             <p>Estudiante de la Universidad Pontificia Bolivariana,especialista en procesamiento de datos y
@@ -49,7 +60,7 @@
 
         <!-- Nicolás Jaramillo -->
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Nicolás Jaramillo">
+            <img src="{% static 'images/nico.png' %}" class="profile-img mb-3" alt="Nicolás Jaramillo">
             <h5>Nicolás Jaramillo</h5>
             <p class="text-muted">Ingeniero en Ciencia de Datos</p>
             <p>Estudiante de la Universidad Pontificia Bolivariana,enfocado en inteligencia artificial y big data.Tiene
