@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}Sobre Nosotros - ProyectoIoT2025_10MJ{% endblock %}
 
@@ -9,10 +11,13 @@
     <div class="row g-5">
         <!-- Samuel Arroyave -->
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Samuel Arroyave">
+            <img src="{% static 'images/samuel.png' %}" class="img-fluid rounded-circle mb-3" alt="Samuel Arroyave">
             <h5>Samuel Arroyave</h5>
-            <p class="text-muted">Ingeniero de Sistemas</p>
-            <p>Descripción de Samuel Arroyave. Experto en desarrollo de software y arquitectura de sistemas.</p>
+            <p class="text-muted">Ingeniero de Sistemas e informática</p>
+            <p>Estudiante de la Universidad Pontificia Bolivariana,experto en desarrollo de software y arquitectura de
+                sistemas.Tiene amplia experiencia en backend, APIs REST y despliegue en la nube.
+
+            </p>
         </div>
 
         <!-- Vera Zasulich -->
@@ -20,15 +25,17 @@
             <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Vera Zasulich">
             <h5>Vera Zasulich</h5>
             <p class="text-muted">Ingeniera Electrónica</p>
-            <p>Descripción de Vera Zasulich. Especializada en análisis de datos y machine learning.</p>
+            <p>Especializada en análisis de datos y machine learning.Tiene experiencia en circuitos de potencia,
+                distribución eléctrica de baja tensión y protección de sistemas electrónicos.</p>
         </div>
 
         <!-- Ada Mattos -->
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Ada Mattos">
+            <img src="{% static 'images/ada.png' %}" class="img-fluid rounded-circle mb-3" alt="Ada Mattos">
             <h5>Ada Mattos</h5>
             <p class="text-muted">Ingeniera en Ciencia de Datos</p>
-            <p>Descripción de Ada Mattos. Experta en visualización de datos y estadística aplicada.</p>
+            <p>Estudiante de la Universidad Pontificia Bolivariana,experta en visualización de datos y estadística
+                aplicada.Domina herramientas de visualización como Tableau y librerías como Matplotlib y Seaborn.</p>
         </div>
 
         <!-- Pablo Peralta -->
@@ -36,7 +43,8 @@
             <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Pablo Peralta">
             <h5>Pablo Peralta</h5>
             <p class="text-muted">Ingeniero en Ciencia de Datos</p>
-            <p>Descripción de Pablo Peralta. Especialista en procesamiento de datos y algoritmos.</p>
+            <p>Estudiante de la Universidad Pontificia Bolivariana,especialista en procesamiento de datos y
+                algoritmos.Tiene experiencia con flujos ETL, bases de datos NoSQL y sistemas distribuidos.</p>
         </div>
 
         <!-- Nicolás Jaramillo -->
@@ -44,7 +52,8 @@
             <img src="https://via.placeholder.com/200" class="img-fluid rounded-circle mb-3" alt="Nicolás Jaramillo">
             <h5>Nicolás Jaramillo</h5>
             <p class="text-muted">Ingeniero en Ciencia de Datos</p>
-            <p>Descripción de Nicolás Jaramillo. Enfocado en inteligencia artificial y big data.</p>
+            <p>Estudiante de la Universidad Pontificia Bolivariana,enfocado en inteligencia artificial y big data.Tiene
+                conocimientos en inteligencia artificial, deep learning.</p>
         </div>
     </div>
 </div>
