@@ -13,6 +13,7 @@ import random
 from .models import Sensor, SensorData, SensorType
 from .forms import SensorForm, SensorTypeForm, SensorFilterForm, ManualDataEntryForm
 from .utils import prepare_time_series_data, generate_demo_data
+from .external_service import ExternalSensorService
 
 class DashboardView(LoginRequiredMixin, ListView):
     model = Sensor
@@ -23,6 +24,16 @@ class DashboardView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sensor_types'] = SensorType.objects.all()
+        
+        # Add external server status
+        external_service = ExternalSensorService()
+        is_available, server_info = external_service.check_external_server_health()
+        context['external_server'] = {
+            'is_available': is_available,
+            'info': server_info,
+            'url': external_service.base_url
+        }
+        
         return context
     
     def get_queryset(self):
@@ -108,7 +119,20 @@ class SensorCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        
+        # Save the sensor first
+        response = super().form_valid(form)
+        
+        # Send sensor data to external server
+        external_service = ExternalSensorService()
+        success, result = external_service.send_sensor_to_external_server(self.object)
+        
+        if success:
+            messages.success(self.request, f"Sensor '{self.object.sensor_id}' was also successfully registered on the external server.")
+        else:
+            messages.warning(self.request, f"Sensor '{self.object.sensor_id}' was created locally, but could not be sent to external server: {result.get('message', 'Unknown error')}")
+        
+        return response
 
 class SensorEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Sensor
@@ -136,6 +160,25 @@ class SensorDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         # Ensure users can only delete their own sensors
         return Sensor.objects.filter(owner=self.request.user)
+    
+    def delete(self, request, *args, **kwargs):
+        """Override delete to also remove from external server"""
+        self.object = self.get_object()
+        sensor_id = self.object.sensor_id
+        
+        # Delete from external server first
+        external_service = ExternalSensorService()
+        success, result = external_service.delete_sensor_from_external_server(sensor_id)
+        
+        # Delete from local database
+        response = super().delete(request, *args, **kwargs)
+        
+        if success:
+            messages.success(request, f"Sensor '{sensor_id}' was successfully deleted from both local and external servers.")
+        else:
+            messages.warning(request, f"Sensor '{sensor_id}' was deleted locally, but could not be removed from external server: {result.get('message', 'Unknown error')}")
+        
+        return response
 
 @login_required
 def get_sensor_data(request, sensor_id):
@@ -188,7 +231,16 @@ def add_sensor_data(request, sensor_id):
             data_point.sensor = sensor
             data_point.save()
             
-            messages.success(request, f"Data point added successfully: {data_point.value} {data_point.unit}")
+            # Send value update to external server
+            external_service = ExternalSensorService()
+            success, result = external_service.update_sensor_value(sensor, data_point.value, data_point.unit)
+            
+            if success:
+                messages.success(request, f"Data point added successfully: {data_point.value} {data_point.unit}. External server updated.")
+            else:
+                messages.success(request, f"Data point added successfully: {data_point.value} {data_point.unit}")
+                messages.warning(request, f"Could not update external server: {result.get('message', 'Unknown error')}")
+            
             return redirect('sensors:detail', pk=sensor_id)
     
     # If form invalid or not POST, redirect back to detail page

@@ -19,7 +19,23 @@
                 <i class="fas fa-sign-in-alt me-1"></i> Login to Manage
             </a>
         </div>
-        {% endif %}
+        {% endif %}    </div>
+    
+    <!-- External Server Status -->
+    <div class="alert {% if external_server.is_available %}alert-success{% else %}alert-warning{% endif %} mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="fas {% if external_server.is_available %}fa-cloud-upload-alt text-success{% else %}fa-exclamation-triangle text-warning{% endif %} me-2"></i>
+            <div>
+                <strong>External Server Status:</strong>
+                {% if external_server.is_available %}
+                    <span class="text-success">Connected</span> - Sensors will be automatically synchronized
+                {% else %}
+                    <span class="text-warning">{{ external_server.info.status|title }}</span> - {{ external_server.info.message }}
+                {% endif %}
+                <br>
+                <small class="text-muted">Server: {{ external_server.url }}</small>
+            </div>
+        </div>
     </div>
     
     <!-- Sensor Type Filter -->
