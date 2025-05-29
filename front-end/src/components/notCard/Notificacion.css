@@ -1,0 +1,72 @@
+.ovdrn_not{
+    background-color: #F1F1F0;
+    margin: .5rem 0;
+    padding: 1rem;
+    border-radius: .5rem;
+}
+
+.ovdrn_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: .5rem;
+    margin-bottom: .5rem;
+    border-bottom: #E0E0E0 solid .1rem;
+}
+
+.ovdrn_l{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 25%;
+}
+
+.ovdrn_r{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 35%;
+}
+
+.ovdrn_icon{
+    font-size: 1.2rem;
+    color: #800000;
+}
+
+.ovdrnh_title{
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #800000;
+}
+
+.ovdrnh_hum{
+    font-family: "Roboto", sans-serif;
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.ovdrnh_temp{
+    font-family: "Roboto", sans-serif;
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.ovdrn_info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ovdrni_title{
+    font-family: "Roboto", sans-serif;
+    font-size: .9rem;
+    font-weight: 500;
+    color: #626468;
+}
+
+.ovdrni_sen{
+    font-family: "Roboto", sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+}

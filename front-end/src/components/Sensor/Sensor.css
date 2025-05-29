@@ -1,0 +1,8 @@
+.carousel-container-s{
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    max-width: 85vw;
+    gap: 1rem;
+    padding: 5rem;
+}

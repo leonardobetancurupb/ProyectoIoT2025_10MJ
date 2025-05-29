@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.ov{
+    display: flex;
+    height: 100vh;
+    background-color: #E0E0E0;
+}
+
+.ho{
+    margin-top: .5rem;
+    margin-bottom: -.5rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 89vw;
+}
+
+.ho_search{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 45vw;
+    cursor: text;
+}
+
+.ho_title{
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-right: 1rem;
+    border-right: #626468 solid .1rem;
+    cursor: pointer;
+}
+
+.ho_icon{
+    margin-left: 1rem;
+    font-size: 1.2rem;
+    margin-right: .5rem;
+    color: #626468;
+}
+
+.ho_sub{
+    font-family: "Roboto", sans-serif;
+    color: #626468;
+    font-size: .9rem;
+    font-weight: 400;
+}
+
+.ho_not_container{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.ho_not{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    padding: .3rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.hon_icon{
+    font-size: 1.2rem;
+}
+
+.ov_dash{
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 89vw;
+}
+
+.ovd_main{
+    padding: 1rem;
+    border-radius: .5rem;
+    width: 63vw;
+    height: 79vh;
+    background-color: #FFFFFF;
+}
+
+.ovd_right{
+    width: 22vw;
+    height: 83.5vh;
+}
+
+.ovdr_not{
+    padding: 1rem;
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    width: 90%;
+    height: 31%;
+    overflow-y: scroll;
+    background-color: #FFFFFF;
+}
+
+.ovdmb_left{
+    padding: 1rem;
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    width: 90%;
+    height: 22%;
+    background-color: #FFFFFF;
+}
+
+.ovdmb_right{
+    padding: 1rem;
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    width: 90%;
+    height: 22%;
+    background-color: #FFFFFF;
+}
+
+.ovdm_title{
+    font-family: "Roboto", sans-serif;
+    color: #111111;
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+
+.ovdm_sub{
+    font-family: "Roboto", sans-serif;
+    color: #626468;
+    font-size: .9rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.ovdm_info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ovdm_usr{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: .5rem;
+    width: 30%;
+    background-color: #FEF100;
+    border-radius: .5rem;
+}
+
+.ovdmi_title{
+    font-family: "Roboto", sans-serif;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.ovdmi_sub{
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.ovdmi_sub2{
+    font-family: "Roboto", sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+}
+
+.dg{
+    background-color: #626468;
+    color: #F1F1F0;
+}
+
+.g{
+    background-color: #F1F1F0;
+}
+
+.ovdrn_title{
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.ovdm_graph{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55vh;
+}
+
+.ovdmb_graph{
+    display: block;
+    width: 20vw;
+    height: 20vh;
+    overflow: hidden;
+}

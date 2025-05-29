@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/*
+    -- fonts --
+    font-family: "Roboto", sans-serif;
+
+    -- colors --
+    gray: #E0E0E0
+    d_gray: #626468
+    gray over wihite: #F1F1F0
+    yellow: #FEF100
+    black: #111111
+
+*/
+
+.lp{
+    height: 95.5vh;
+    padding: 1% 5% 1% 5%;
+    background-color: #FEF100;
+}
+
+.h_lp{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3%;
+}
+
+.h_l{
+    color: #111111;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.h_nl{
+    display: flex;
+}
+
+.h_nl a{
+    margin-right: 20px;   
+}
+
+.h_logo{
+    width: 10%;
+    cursor: pointer;
+}
+
+.btn{
+    background-color: #FFFFFF;
+    text-align: center;
+    width: 120px;
+    padding: 1%;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.btn:hover{
+    background-color: #111111;
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+.t_lp{
+    margin-bottom: 6%;
+    padding-bottom: .5%;
+    border-bottom: #111111 solid 5px;
+}
+
+.t_top, .t_bottom{
+    display: flex;
+    align-items: center;
+    color: #111111;
+}
+
+.tt_text{
+    font-family: "Roboto", sans-serif;
+    font-size: 100px;
+    font-weight: 500;
+}
+
+.tt_arrow{
+    font-size: 100px;
+}
+
+.tt_space2{
+    margin-right: 6.5%;
+}
+
+.btn2{
+    color: #FFFFFF;
+    background-color: #111111;
+    text-align: center;
+    height: 50px;
+    width: 160px;
+    padding: 1%;
+    margin: 0% 3.7%;
+    border-radius: 30px;
+    transition: all 1s ease;
+    cursor: pointer;
+}
+
+.btn2:hover{
+    background-color: #FFFFFF;
+    color: #111111;
+    transform: scale(1.05);
+}
+
+.f_lp{
+    display: flex;
+    justify-content: start;
+    height: 169px;
+    color: #FFFFFF;
+    font-family: "Roboto", sans-serif;
+}
+
+.b_box{
+    background-color: #111111;
+    width: 20%;
+    border-radius: 10px;
+    padding: 3.5% 1.5% 1.5% 1.5%;
+}
+
+.s_box{
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    width: 56%;
+    margin: 0% 2%;
+    border-radius: 10px;
+    padding: 2% 1.5% 1.5% 1.5%;
+}
+
+.s_team{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bb_title{
+    display: block;
+    font-size: 52px;
+    font-weight: 500;
+}
+
+.bb_sub{
+    margin-top: -10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.bb_note{
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-top: #D2D2D2 solid 1px;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.sb_name{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.sb_note{
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.esc_upb{
+    width: 20%;
+}
+
+.b_box2{
+    background-color: #111111;
+    width: 20%;
+    border-radius: 10px;
+    padding: 2% 1.5% 1.5% 1.5%;
+}
+
+.bb_title2{
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.center{
+    text-align: center;
+}
