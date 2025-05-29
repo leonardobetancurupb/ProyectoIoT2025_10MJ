@@ -1,0 +1,78 @@
+@tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    :root {
+      /* Fondo blanco opaco, verde biche como primario */
+      --background: 0 0% 98%; /* Un blanco muy claro, casi puro, opaco */
+      --foreground: 120 25% 25%; /* Un verde oscuro para el texto, buena legibilidad */
+      
+      --card: 0 0% 100%; /* Blanco puro para las tarjetas, para que se distingan del fondo si es necesario */
+      --card-foreground: 120 25% 25%; /* Mismo verde oscuro para texto en tarjetas */
+      
+      --popover: 0 0% 100%;
+      --popover-foreground: 120 25% 25%;
+      
+      --primary: 100 60% 45%; /* Verde Biche principal - vibrante pero no neón */
+      --primary-foreground: 90 60% 98%; /* Un blanco muy claro para contraste sobre el verde */
+      
+      --secondary: 100 30% 75%; /* Un verde más pálido y suave como secundario */
+      --secondary-foreground: 100 30% 25%; /* Un verde oscuro para texto sobre el secundario */
+      
+      --muted: 0 0% 90%; /* Un gris claro para elementos menos importantes, sobre el fondo blanco */
+      --muted-foreground: 0 0% 40%; /* Un gris medio para texto sobre muted */
+      
+      --accent: 45 70% 55%; /* Un amarillo dorado suave como acento, complementa bien el verde */
+      --accent-foreground: 45 50% 15%; /* Un marrón oscuro para texto sobre el acento */
+      
+      --destructive: 0 65% 55%; /* Un rojo suave para errores */
+      --destructive-foreground: 0 0% 100%; /* Blanco para texto sobre destructivo */
+      
+      --border: 100 20% 80%; /* Un borde verde muy claro, o podría ser un gris claro: 0 0% 85% */
+      --input: 0 0% 95%; /* Un color de input gris muy claro, sobre fondo blanco */
+      --ring: 100 60% 55%; /* Un verde un poco más brillante para el focus ring */
+      
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      /* Paleta oscura con el verde biche como protagonista */
+      --background: 120 15% 10%; /* Fondo verde muy oscuro, casi negro */
+      --foreground: 100 30% 85%; /* Texto verde claro para contraste */
+
+      --card: 120 15% 15%; /* Tarjetas un poco más claras que el fondo */
+      --card-foreground: 100 30% 85%; /* Mismo texto verde claro */
+
+      --popover: 120 15% 15%;
+      --popover-foreground: 100 30% 85%;
+
+      --primary: 100 55% 50%; /* Verde Biche, ligeramente más brillante en modo oscuro */
+      --primary-foreground: 100 25% 15%; /* Verde muy oscuro para texto sobre primario */
+
+      --secondary: 100 25% 30%; /* Verde oscuro suave como secundario */
+      --secondary-foreground: 100 30% 80%; /* Texto verde claro sobre secundario */
+
+      --muted: 120 15% 20%; /* Verde oscuro apagado */
+      --muted-foreground: 100 20% 65%; /* Texto verde grisáceo */
+
+      --accent: 45 65% 60%; /* Amarillo dorado, más vibrante en modo oscuro */
+      --accent-foreground: 45 40% 10%; /* Marrón muy oscuro para texto sobre acento */
+
+      --destructive: 0 60% 50%; /* Rojo para errores */
+      --destructive-foreground: 0 0% 95%; /* Texto casi blanco sobre destructivo */
+
+      --border: 100 20% 25%; /* Borde verde oscuro */
+      --input: 100 20% 22%; /* Input verde oscuro */
+      --ring: 100 55% 60%; /* Verde biche más brillante para el ring */
+    }
+
+    body {
+      @apply bg-background text-foreground;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @layer base {
+      * {
+        @apply border-border;
+      }
+    }
