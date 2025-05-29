@@ -5,12 +5,14 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'django-insecure-bz_9=s=^8v=!&up-$q8x(b#2eh+g5($(ass4vd)29+)mp4(pp8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Orion Context Broker settings
 ORION_URL = os.environ.get('ORION_URL', 'http://localhost:1026')
@@ -94,7 +96,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'landing/static',
+    BASE_DIR / 'landing/static'
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -118,3 +120,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+DEBUG = True
