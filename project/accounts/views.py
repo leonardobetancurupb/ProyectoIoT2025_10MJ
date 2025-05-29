@@ -44,6 +44,8 @@ class ProfileView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class EditProfileView(SuccessMessageMixin, UpdateView):
+    model = User
+    fields = ['first_name', 'last_name', 'email']
     template_name = 'registration/edit_profile.html'
     success_url = reverse_lazy('accounts:profile')
     success_message = "Your profile has been updated successfully."
